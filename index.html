@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taski - Welcome!</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="scripts/load.js"></script>
+</head>
+<body>
+  <div class="s login">
+    <section>
+      <h1 class="hidden">Welcome back to Taski!</h1>
+      <p class="hidden">Log in to start managing your tasks effortlessly.</p>
+      <p class="hidden thin">Get organized and stay productive with our user-friendly platform.</p>
+      <button class="hidden"><span>SignUp</span></button>
+    </section>
+    <form action="log.php" method="POST" class="form" id="loginForm">
+      <h2>Login</h2>
+      <div class="message" style="display: none;">
+        User registered successfully!
+      </div>
+      <div class="error" style="display: none;">
+        Error, try again!
+      </div>
+      <input type="text" name="username" id="username" placeholder="Username" class="hidden">
+      <input type="password" name="password" id="password" placeholder="Password" class="hidden">
+      <button type="submit" name="login" class="hidden"><span>LogIn Now</span></button>
+    </form>
+  </div>
+  <div class="s signup">
+    <section>
+      <h1 class="hidden">Welcome to Taski!</h1>
+      <p class="hidden">Sign Up in to start managing your tasks effortlessly.</p>
+      <p class="hidden thin">Get organized and stay productive with our user-friendly platform.</p>
+      <button class="hidden"><span>LogIn</span></button>
+    </section>
+    <form action="log.php" method="POST" class="form" id="signupForm">
+      <h2>SignUp</h2>
+      <input type="text" name="username" id="signupUsername" placeholder="Username" class="hidden">
+      <input type="password" name="password" id="signupPassword" placeholder="Password" class="hidden">
+      <input type="email" name="email" id="email" placeholder="Email@society.exp" class="hidden">
+      <button type="submit" name="register" class="hidden"><span>SignUp Now</span></button>
+    </form>
+  </div>
+
+  <script src="scripts.js"></script>
+  <script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Login form
+      const loginForm = document.getElementById('loginForm');
+      const loginUsername = document.getElementById('username');
+      const loginPassword = document.getElementById('password');
+
+      loginForm.addEventListener('submit', (event) => {
+        if (!loginUsername.value || !loginPassword.value) {
+          event.preventDefault();
+          alert('Username and password are required!');
+        }
+      });
+
+      // SignUp form
+      signupForm.addEventListener('submit', (event) => {
+  console.log(signupUsername.value, signupPassword.value, email.value);
+  if (!signupUsername.value || !signupPassword.value || !email.value) {
+    event.preventDefault();
+    alert('Username, password, and email are required!');
+    return false; 
+  }
+});
+    });
+  </script>
+  <script src="scripts/animation.js"></script>
+  <script src="scripts/scroll.js"></script>
+  <script src="scripts/tests.js"></script>
+  <script src="scripts/other.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Div with Editable Content</title>
+  <style>
+    body {
+      margin-left: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      gap: 10px;
+      background-color: beige;
+    }
+
+    .box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-direction: space-between;
+      background: linear-gradient(120deg, #0093E9,#80D0C7);
+      border-radius: 10px;
+      box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.092);
+      padding: 20px;
+      margin: 20px;
+      color: beige;
+    }
+
+    button {
+      margin-top: 10px;
+    }
+  </style>
+  <link rel="stylesheet" href="sty.css">
+</head>
+<body>
+  <div id="container"></div>
+  <button id="addDivButton">Add Task</button>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var container = document.getElementById('container');
+      
+      // Function to create a box with task details
+      function createTaskBox(task) {
+        var newDiv = document.createElement('div');
+        newDiv.className = 'box';
+        var title = document.createElement('h2');
+        title.contentEditable = true;
+        title.textContent = task.title;
+
+        var textArea = document.createElement('textarea');
+        textArea.rows = 4;
+        textArea.cols = 50;
+        textArea.value = task.text;
+
+        var textInput = document.createElement('p');
+        textInput.textContent = task.checked ? 'Checked' : 'Unchecked';
+
+        var checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = task.checked;
+        checkbox.addEventListener('change', function() {
+          textInput.textContent = this.checked ? 'Checked' : 'Unchecked';
+        });
+
+        var saveButton = document.createElement('button');
+        saveButton.textContent = 'Save';
+        saveButton.addEventListener('click', function() {
+          var taskDetails = {
+            title: title.textContent,
+            text: textArea.value,
+            checked: checkbox.checked
+          };
+          saveTask(taskDetails);
+        });
+
+        newDiv.appendChild(title);
+        newDiv.appendChild(textArea);
+        newDiv.appendChild(textInput);
+        newDiv.appendChild(checkbox);
+        newDiv.appendChild(saveButton);
+        container.appendChild(newDiv);
+      }
+      
+      // Function to fetch tasks from the server
+      function fetchTasks() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'fetch_tasks.php');
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            var tasks = JSON.parse(xhr.responseText);
+            tasks.forEach(function(task) {
+              createTaskBox(task);
+            });
+          } else {
+            console.error('Error fetching tasks:', xhr.statusText);
+          }
+        };
+        xhr.send();
+      }
+
+      fetchTasks(); // Call fetchTasks when the page is loaded
+
+      var addButton = document.getElementById('addDivButton');
+      addButton.addEventListener('click', function() {
+        // Code to add new task box
+        var newTask = {
+          title: 'New Task', // Default title for new tasks
+          text: '',          // Default text for new tasks
+          checked: false     // Default checked status for new tasks
+        };
+        createTaskBox(newTask);
+      });
+
+      function saveTask(taskDetails) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'save_task.php');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            alert('Task saved successfully!');
+          } else {
+            alert('Error saving task: ' + xhr.statusText);
+          }
+        };
+        xhr.send(JSON.stringify(taskDetails));
+      }
+    });
+  </script>
+</body>
+</html>
